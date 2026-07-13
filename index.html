@@ -12,6 +12,7 @@
             --text: #3e2723;
             --bg: #fffbf7;
             --danger: #e53935;
+            --success: #2e7d32;
         }
 
         body {
@@ -23,6 +24,9 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 100vh;
+            justify-content: center;
+            box-sizing: border-box;
         }
 
         .container {
@@ -31,20 +35,16 @@
             background: white;
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 25px rgba(109, 76, 65, 0.08);
             box-sizing: border-box;
-        }
-
-        /* The new success page container */
-        #success-page {
-            display: none;
-            text-align: center;
         }
 
         h1 {
             text-align: center;
             color: var(--primary);
+            margin-top: 0;
             margin-bottom: 5px;
+            font-size: 2rem;
         }
 
         .subtitle {
@@ -53,29 +53,33 @@
             margin-top: 0;
             margin-bottom: 25px;
             font-style: italic;
+            font-size: 1.05rem;
+        }
+
+        .status-container {
+            text-align: center;
+            margin-bottom: 20px;
         }
 
         .status-tag {
             display: inline-block;
             background-color: #e8f5e9;
-            color: #2e7d32;
-            padding: 5px 10px;
+            color: var(--success);
+            padding: 6px 14px;
             border-radius: 20px;
             font-size: 0.85rem;
             font-weight: bold;
-            margin-bottom: 20px;
-            text-align: center;
-            width: fit-content;
+            letter-spacing: 0.5px;
         }
 
-        .payment-box {
+        .notice-box {
             background-color: #ffebee;
-            border: 2px solid var(--danger);
-            padding: 25px;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            margin-top: 20px;
-            line-height: 1.5;
+            border-left: 4px solid var(--danger);
+            padding: 15px;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            line-height: 1.4;
             color: #c62828;
             font-weight: bold;
         }
@@ -85,23 +89,33 @@
             margin-bottom: 8px;
             font-weight: 600;
             font-size: 0.95rem;
+            color: var(--primary);
         }
 
         input, select, textarea {
             width: 100%;
-            padding: 12px;
+            padding: 12px 15px;
             margin-bottom: 20px;
-            border: 1px solid var(--primary-light);
+            border: 1.5px solid var(--primary-light);
             border-radius: 8px;
             font-size: 1rem;
             box-sizing: border-box;
             background-color: #fafafa;
+            transition: all 0.2s ease;
+            color: var(--text);
         }
 
         input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--accent);
             background-color: white;
+            box-shadow: 0 0 0 3px rgba(255, 183, 77, 0.25);
+        }
+
+        /* Delivery highlight style */
+        .delivery-active {
+            background-color: #fffde7 !important;
+            border-color: var(--accent) !important;
         }
 
         button {
@@ -114,11 +128,15 @@
             font-weight: bold;
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s ease, transform 0.1s ease;
         }
 
         button:hover {
             background-color: #4e342e;
+        }
+
+        button:active {
+            transform: scale(0.98);
         }
 
         #sold-out-notice {
@@ -131,17 +149,25 @@
             border-radius: 8px;
             font-weight: bold;
             font-size: 1.2rem;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
 
-    <div id="form-page" class="container">
+    <div class="container">
         <h1>🍪 The Cookie Corner</h1>
         <p class="subtitle">Freshly baked cookies for Shabbos</p>
         
-        <div style="text-align: center;">
+        <div class="status-container">
             <div id="stock-tag" class="status-tag">🟢 ACCEPTING PRE-ORDERS</div>
+        </div>
+
+        <div class="notice-box">
+            ⚠️ Please pay your due amount right away if you want to save your spot! <br>
+            <span style="font-weight: normal; font-size: 0.85rem; color: #3e2723; display:block; margin-top: 5px;">
+            Send Interac E-Transfer to: <strong>yonasilver90@gmail.com</strong>
+            </span>
         </div>
 
         <div id="sold-out-notice"></div>
@@ -166,72 +192,29 @@
             <label id="notes-label" for="address_or_notes">Address / Special Notes</label>
             <textarea id="address_or_notes" name="address_or_notes" rows="4" placeholder="If delivery is selected, please enter your full street address, unit/apartment number, and specific delivery or buzzer instructions here."></textarea>
 
-            <button type="submit" id="submit-btn">Submit Pre-Order</button>
+            <button type="submit">Submit Pre-Order</button>
         </form>
-    </div>
-
-    <div id="success-page" class="container">
-        <h1>✅ Order Received!</h1>
-        <p class="subtitle">Just one more step to secure your cookies.</p>
-        
-        <div class="payment-box">
-            ⚠️ Please pay your due amount right away if you want to save your spot! <br>
-            <span style="font-weight: normal; font-size: 1rem; color: #3e2723; display:block; margin-top: 15px;">
-            Send Interac E-Transfer to:<br> 
-            <strong style="font-size: 1.2rem;">yonasilver90@gmail.com</strong>
-            </span>
-        </div>
-        <br>
-        <button onclick="window.location.reload();" style="background-color: var(--primary-light); color: var(--text);">Place Another Order</button>
     </div>
 
     <script>
         const form = document.getElementById("cookie-form");
         const orderSelection = document.getElementById("order_selection");
         const notesInput = document.getElementById("address_or_notes");
-        const formPage = document.getElementById("form-page");
-        const successPage = document.getElementById("success-page");
-        const submitBtn = document.getElementById("submit-btn");
+        const notesLabel = document.getElementById("notes-label");
 
-        // Dynamically make the field strictly mandatory if delivery is picked
+        // Dynamically make the address mandatory with visual warning changes if delivery is chosen
         orderSelection.addEventListener("change", function() {
             if (this.value.includes("delivery")) {
                 notesInput.required = true;
-                notesInput.placeholder = "MANDATORY FOR DELIVERY: Please include your complete address, apartment/unit number, buzzer codes, or any specific drop-off instructions.";
+                notesInput.classList.add("delivery-active");
+                notesLabel.innerHTML = 'Address / Delivery Instructions <span style="color: var(--danger);">*</span>';
+                notesInput.placeholder = "REQUIRED: Please enter your complete address, apartment/unit number, buzzer codes, and specific drop-off instructions.";
             } else {
                 notesInput.required = false;
+                notesInput.classList.remove("delivery-active");
+                notesLabel.innerHTML = 'Address / Special Notes';
                 notesInput.placeholder = "If delivery is selected, please enter your full street address, unit/apartment number, and specific delivery or buzzer instructions here.";
             }
-        });
-
-        // Form submission via AJAX to show the second page
-        form.addEventListener("submit", async function(event) {
-            event.preventDefault(); // Stop standard redirect
-            submitBtn.innerText = "Sending...";
-            submitBtn.disabled = true;
-
-            var data = new FormData(event.target);
-            fetch(event.target.action, {
-                method: form.method,
-                body: data,
-                headers: {
-                    'Accept': 'application/json'
-                }
-            }).then(response => {
-                if (response.ok) {
-                    formPage.style.display = "none";
-                    successPage.style.display = "block";
-                    form.reset();
-                } else {
-                    alert("Oops! There was a problem submitting your order. Please try again.");
-                    submitBtn.innerText = "Submit Pre-Order";
-                    submitBtn.disabled = false;
-                }
-            }).catch(error => {
-                alert("Oops! There was a network error. Please try again.");
-                submitBtn.innerText = "Submit Pre-Order";
-                submitBtn.disabled = false;
-            });
         });
 
         // --- AUTOMATIC DEADLINE CHECK ---
