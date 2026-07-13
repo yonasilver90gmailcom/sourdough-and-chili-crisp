@@ -35,6 +35,12 @@
             box-sizing: border-box;
         }
 
+        /* The new success page container */
+        #success-page {
+            display: none;
+            text-align: center;
+        }
+
         h1 {
             text-align: center;
             color: var(--primary);
@@ -62,14 +68,14 @@
             width: fit-content;
         }
 
-        .notice-box {
+        .payment-box {
             background-color: #ffebee;
-            border-left: 4px solid var(--danger);
-            padding: 15px;
-            border-radius: 4px;
-            font-size: 0.95rem;
-            margin-bottom: 25px;
-            line-height: 1.4;
+            border: 2px solid var(--danger);
+            padding: 25px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            line-height: 1.5;
             color: #c62828;
             font-weight: bold;
         }
@@ -130,17 +136,12 @@
 </head>
 <body>
 
-    <div class="container">
+    <div id="form-page" class="container">
         <h1>🍪 The Cookie Corner</h1>
         <p class="subtitle">Freshly baked cookies for Shabbos</p>
         
-        <div id="stock-tag" class="status-tag">🟢 ACCEPTING PRE-ORDERS</div>
-
-        <div class="notice-box">
-            ⚠️ Please pay you’re due amount right away if you want to save your spot! <br>
-            <span style="font-weight: normal; font-size: 0.85rem; color: #3e2723; display:block; margin-top: 5px;">
-            Send Interac E-Transfer to: <strong>yonasilver90@gmail.com</strong>
-            </span>
+        <div style="text-align: center;">
+            <div id="stock-tag" class="status-tag">🟢 ACCEPTING PRE-ORDERS</div>
         </div>
 
         <div id="sold-out-notice"></div>
@@ -156,23 +157,41 @@
             <label for="order_selection">Select Your Order</label>
             <select id="order_selection" name="order_selection" required>
                 <option value="" disabled selected>Choose an option...</option>
-                <option value="1-dozen-pickup">1 Dozen Cookies - Friday Pickup ($10.99)</option>
-                <option value="2-dozen-pickup">2 Dozen Cookies - Friday Pickup ($21.98)</option>
-                <option value="1-dozen-delivery">1 Dozen Cookies - Friday Delivery ($10.99 + $4.99 delivery fee)</option>
-                <option value="2-dozen-delivery">2 Dozen Cookies - Friday Delivery ($21.98 + $4.99 delivery fee)</option>
+                <option value="1-dozen-pickup">1 Dozen Cookies - Friday Pickup ($7.99)</option>
+                <option value="2-dozen-pickup">2 Dozen Cookies - Friday Pickup ($15.98)</option>
+                <option value="1-dozen-delivery">1 Dozen Cookies - Friday Delivery ($7.99 + $4.99 delivery fee)</option>
+                <option value="2-dozen-delivery">2 Dozen Cookies - Friday Delivery ($15.98 + $4.99 delivery fee)</option>
             </select>
 
             <label id="notes-label" for="address_or_notes">Address / Special Notes</label>
             <textarea id="address_or_notes" name="address_or_notes" rows="4" placeholder="If delivery is selected, please enter your full street address, unit/apartment number, and specific delivery or buzzer instructions here."></textarea>
 
-            <button type="submit">Submit Pre-Order</button>
+            <button type="submit" id="submit-btn">Submit Pre-Order</button>
         </form>
+    </div>
+
+    <div id="success-page" class="container">
+        <h1>✅ Order Received!</h1>
+        <p class="subtitle">Just one more step to secure your cookies.</p>
+        
+        <div class="payment-box">
+            ⚠️ Please pay your due amount right away if you want to save your spot! <br>
+            <span style="font-weight: normal; font-size: 1rem; color: #3e2723; display:block; margin-top: 15px;">
+            Send Interac E-Transfer to:<br> 
+            <strong style="font-size: 1.2rem;">yonasilver90@gmail.com</strong>
+            </span>
+        </div>
+        <br>
+        <button onclick="window.location.reload();" style="background-color: var(--primary-light); color: var(--text);">Place Another Order</button>
     </div>
 
     <script>
         const form = document.getElementById("cookie-form");
         const orderSelection = document.getElementById("order_selection");
         const notesInput = document.getElementById("address_or_notes");
+        const formPage = document.getElementById("form-page");
+        const successPage = document.getElementById("success-page");
+        const submitBtn = document.getElementById("submit-btn");
 
         // Dynamically make the field strictly mandatory if delivery is picked
         orderSelection.addEventListener("change", function() {
@@ -183,6 +202,36 @@
                 notesInput.required = false;
                 notesInput.placeholder = "If delivery is selected, please enter your full street address, unit/apartment number, and specific delivery or buzzer instructions here.";
             }
+        });
+
+        // Form submission via AJAX to show the second page
+        form.addEventListener("submit", async function(event) {
+            event.preventDefault(); // Stop standard redirect
+            submitBtn.innerText = "Sending...";
+            submitBtn.disabled = true;
+
+            var data = new FormData(event.target);
+            fetch(event.target.action, {
+                method: form.method,
+                body: data,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    formPage.style.display = "none";
+                    successPage.style.display = "block";
+                    form.reset();
+                } else {
+                    alert("Oops! There was a problem submitting your order. Please try again.");
+                    submitBtn.innerText = "Submit Pre-Order";
+                    submitBtn.disabled = false;
+                }
+            }).catch(error => {
+                alert("Oops! There was a network error. Please try again.");
+                submitBtn.innerText = "Submit Pre-Order";
+                submitBtn.disabled = false;
+            });
         });
 
         // --- AUTOMATIC DEADLINE CHECK ---
