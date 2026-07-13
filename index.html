@@ -63,13 +63,15 @@
         }
 
         .notice-box {
-            background-color: #fff3e0;
-            border-left: 4px solid var(--accent);
+            background-color: #ffebee;
+            border-left: 4px solid var(--danger);
             padding: 15px;
             border-radius: 4px;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             margin-bottom: 25px;
             line-height: 1.4;
+            color: #c62828;
+            font-weight: bold;
         }
 
         label {
@@ -135,10 +137,10 @@
         <div id="stock-tag" class="status-tag">🟢 ACCEPTING PRE-ORDERS</div>
 
         <div class="notice-box">
-            <strong>Important Info:</strong><br>
-            • Orders close <strong>Wednesday at 10:00 PM</strong>.<br>
-            • <strong>Pickup only</strong> takes place on Friday.<br>
-            • Order confirmed once Interac E-Transfer is received at <strong>yonasilver90@gmail.com</strong>.
+            ⚠️ Please pay you’re due amount right away if you want to save your spot! <br>
+            <span style="font-weight: normal; font-size: 0.85rem; color: #3e2723; display:block; margin-top: 5px;">
+            Send Interac E-Transfer to: <strong>yonasilver90@gmail.com</strong>
+            </span>
         </div>
 
         <div id="sold-out-notice"></div>
@@ -155,10 +157,11 @@
             <select id="order_selection" name="order_selection" required>
                 <option value="" disabled selected>Choose an option...</option>
                 <option value="1-dozen-pickup">1 Dozen Cookies - Friday Pickup ($10.99)</option>
+                <option value="1-dozen-delivery">1 Dozen Cookies - Friday Delivery ($10.99 + $4.99 delivery fee)</option>
             </select>
 
-            <label for="address_or_notes">Pickup Notes / Special Requests</label>
-            <textarea id="address_or_notes" name="address_or_notes" rows="3" placeholder="Let us know what time you'd like to pick up on Friday, or add any special requests here."></textarea>
+            <label for="address_or_notes">Delivery Address / Pickup Notes</label>
+            <textarea id="address_or_notes" name="address_or_notes" rows="3" placeholder="Enter your full home address if you selected delivery, or write your preferred pickup time."></textarea>
 
             <button type="submit">Submit Pre-Order</button>
         </form>
