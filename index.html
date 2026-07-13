@@ -115,6 +115,19 @@
             background-color: #4e342e;
         }
 
+        #delivery-address-section {
+            display: none;
+            background-color: #fffde7;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px dashed #fbc02d;
+            margin-bottom: 20px;
+        }
+
+        #delivery-address-section label {
+            color: #f57f17;
+        }
+
         #sold-out-notice {
             display: none;
             text-align: center;
@@ -157,11 +170,18 @@
             <select id="order_selection" name="order_selection" required>
                 <option value="" disabled selected>Choose an option...</option>
                 <option value="1-dozen-pickup">1 Dozen Cookies - Friday Pickup ($10.99)</option>
+                <option value="2-dozen-pickup">2 Dozen Cookies - Friday Pickup ($21.98)</option>
                 <option value="1-dozen-delivery">1 Dozen Cookies - Friday Delivery ($10.99 + $4.99 delivery fee)</option>
+                <option value="2-dozen-delivery">2 Dozen Cookies - Friday Delivery ($21.98 + $4.99 delivery fee)</option>
             </select>
 
-            <label for="address_or_notes">Delivery Address / Pickup Notes</label>
-            <textarea id="address_or_notes" name="address_or_notes" rows="3" placeholder="Enter your full home address if you selected delivery, or write your preferred pickup time."></textarea>
+            <div id="delivery-address-section">
+                <label for="delivery_address">Delivery Address & Specific Instructions</label>
+                <textarea id="delivery_address" name="delivery_address" rows="3" placeholder="Street address, building/apartment number, buzzer code, or drop-off instructions..."></textarea>
+            </div>
+
+            <label for="address_or_notes">Special Requests / Pickup Notes</label>
+            <textarea id="address_or_notes" name="address_or_notes" rows="2" placeholder="Any dietary notes or general requests..."></textarea>
 
             <button type="submit">Submit Pre-Order</button>
         </form>
@@ -169,13 +189,27 @@
 
     <script>
         const form = document.getElementById("cookie-form");
+        const orderSelection = document.getElementById("order_selection");
+        const deliverySection = document.getElementById("delivery-address-section");
+        const deliveryInput = document.getElementById("delivery_address");
+
+        // Show/hide address field and toggle 'required' state depending on selection
+        orderSelection.addEventListener("change", function() {
+            if (this.value.includes("delivery")) {
+                deliverySection.style.display = "block";
+                deliveryInput.required = true;
+            } else {
+                deliverySection.style.display = "none";
+                deliveryInput.required = false;
+                deliveryInput.value = ""; // Clear if they switched back to pickup
+            }
+        });
 
         // --- AUTOMATIC DEADLINE CHECK ---
         const now = new Date();
-        const currentDay = now.getDay(); // 0 = Sunday, 3 = Wednesday, 4 = Thursday, etc.
+        const currentDay = now.getDay(); 
         const currentHour = now.getHours();
 
-        // Lock form down if it's Wednesday past 10 PM (22:00), Thursday (4), or Friday (5)
         if ((currentDay === 3 && currentHour >= 22) || currentDay === 4 || currentDay === 5) {
             showSoldOut("⏰ The pre-order deadline for this week has passed!");
         }
