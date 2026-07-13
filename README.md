@@ -1,1 +1,39 @@
-# cookie
+# cookie <script>
+    const form = document.getElementById("cookie-form");
+    const formUrl = form.action;
+
+    // --- AUTOMATIC DEADLINE CHECK ---
+    const now = new Date();
+    const currentDay = now.getDay(); // 0 = Sunday, 3 = Wednesday, 4 = Thursday, etc.
+    const currentHour = now.getHours(); // 24-hour format
+
+    // If it's Wednesday (3) after 10 PM (22:00), or if it's Thursday (4) or Friday (5)
+    if ((currentDay === 3 && currentHour >= 22) || currentDay === 4 || currentDay === 5) {
+        showSoldOut("⏰ The deadline for this week has passed!");
+    } else {
+        // If the deadline hasn't passed, still check if Formspree is manually closed/full
+        fetch(formUrl, {
+            method: 'POST',
+            body: new FormData(),
+            headers: { 'Accept': 'application/json' }
+        })
+        .then(response => {
+            if (response.status === 402 || response.status === 403) {
+                showSoldOut("❌ Sorry, we are all out of batches!");
+            }
+        })
+        .catch(err => console.log("Status check completed."));
+    }
+
+    // Helper function to lock down the site
+    function showSoldOut(message) {
+        form.style.display = "none";
+        const notice = document.getElementById("sold-out-notice");
+        notice.innerHTML = message + "<br>Please come again next week.";
+        notice.style.display = "block";
+        
+        const stockTag = document.getElementById("stock-tag");
+        stockTag.innerText = "🔴 CLOSED FOR THIS WEEK";
+        stockTag.style.color = "var(--danger)";
+    }
+</script>
