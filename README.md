@@ -1,39 +1,212 @@
-# cookie <script>
-    const form = document.getElementById("cookie-form");
-    const formUrl = form.action;
+# cookie <script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Cookie Corner</title>
+    <style>
+        :root {
+            --primary: #6d4c41;
+            --primary-light: #d7ccc8;
+            --accent: #ffb74d;
+            --text: #3e2723;
+            --bg: #fffbf7;
+            --danger: #e53935;
+        }
 
-    // --- AUTOMATIC DEADLINE CHECK ---
-    const now = new Date();
-    const currentDay = now.getDay(); // 0 = Sunday, 3 = Wednesday, 4 = Thursday, etc.
-    const currentHour = now.getHours(); // 24-hour format
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    // If it's Wednesday (3) after 10 PM (22:00), or if it's Thursday (4) or Friday (5)
-    if ((currentDay === 3 && currentHour >= 22) || currentDay === 4 || currentDay === 5) {
-        showSoldOut("⏰ The deadline for this week has passed!");
-    } else {
-        // If the deadline hasn't passed, still check if Formspree is manually closed/full
-        fetch(formUrl, {
-            method: 'POST',
-            body: new FormData(),
-            headers: { 'Accept': 'application/json' }
-        })
-        .then(response => {
-            if (response.status === 402 || response.status === 403) {
-                showSoldOut("❌ Sorry, we are all out of batches!");
-            }
-        })
-        .catch(err => console.log("Status check completed."));
-    }
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            box-sizing: border-box;
+        }
 
-    // Helper function to lock down the site
-    function showSoldOut(message) {
-        form.style.display = "none";
-        const notice = document.getElementById("sold-out-notice");
-        notice.innerHTML = message + "<br>Please come again next week.";
-        notice.style.display = "block";
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #795548;
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+
+        .status-tag {
+            display: inline-block;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            width: fit-content;
+        }
+
+        .notice-box {
+            background-color: #fff3e0;
+            border-left: 4px solid var(--accent);
+            padding: 15px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid var(--primary-light);
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            background-color: #fafafa;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            background-color: white;
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #4e342e;
+        }
+
+        #sold-out-notice {
+            display: none;
+            text-align: center;
+            background-color: #ffebee;
+            color: var(--danger);
+            border: 1px solid var(--danger);
+            padding: 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🍪 The Cookie Corner</h1>
+        <p class="subtitle">Freshly baked cookies for Shabbos</p>
         
-        const stockTag = document.getElementById("stock-tag");
-        stockTag.innerText = "🔴 CLOSED FOR THIS WEEK";
-        stockTag.style.color = "var(--danger)";
-    }
-</script>
+        <div id="stock-tag" class="status-tag">🟢 ACCEPTING PRE-ORDERS</div>
+
+        <div class="notice-box">
+            <strong>Important Info:</strong><br>
+            • Orders close <strong>Wednesday at 10:00 PM</strong>.<br>
+            • Pickup/Delivery takes place on Friday.<br>
+            • Order confirmed once Interac E-Transfer is received at <strong>yonasilver90@gmail.com</strong>.
+        </div>
+
+        <div id="sold-out-notice"></div>
+
+        <form id="cookie-form" action="https://formspree.io/f/yonasilver90@gmail.com" method="POST">
+            
+            <label for="name">Your Full Name</label>
+            <input type="text" id="name" name="name" placeholder="John Doe" required>
+
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="john@example.com" required>
+
+            <label for="order_selection">Select Your Order</label>
+            <select id="order_selection" name="order_selection" required>
+                <option value="" disabled selected>Choose an option...</option>
+                <option value="1-dozen-pickup">1 Dozen Cookies - Friday Pickup ($15)</option>
+                <option value="2-dozen-pickup">2 Dozen Cookies - Friday Pickup ($28)</option>
+                <option value="1-dozen-delivery">1 Dozen Cookies - Friday Delivery ($20)</option>
+                <option value="2-dozen-delivery">2 Dozen Cookies - Friday Delivery ($33)</option>
+            </select>
+
+            <label for="address_or_notes">Delivery Address or Pickup Notes</label>
+            <textarea id="address_or_notes" name="address_or_notes" rows="3" placeholder="Enter your full delivery address, or write 'pickup' if you plan to pick up." required></textarea>
+
+            <button type="submit">Submit Pre-Order</button>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById("cookie-form");
+        const formUrl = form.action;
+
+        // --- AUTOMATIC DEADLINE CHECK ---
+        const now = new Date();
+        const currentDay = now.getDay(); // 0 = Sunday, 3 = Wednesday, 4 = Thursday, etc.
+        const currentHour = now.getHours();
+
+        // Lock form down if it's Wednesday past 10 PM (22:00) or any time Thursday/Friday
+        if ((currentDay === 3 && currentHour >= 22) || currentDay === 4 || currentDay === 5) {
+            showSoldOut("⏰ The pre-order deadline for this week has passed!");
+        } else {
+            // If deadline hasn't passed, check Formspree response limits
+            fetch(formUrl, {
+                method: 'POST',
+                body: new FormData(),
+                headers: { 'Accept': 'application/json' }
+            })
+            .then(response => {
+                if (response.status === 402 || response.status === 403) {
+                    showSoldOut("❌ Sorry, we are all out of batches for this week!");
+                }
+            })
+            .catch(err => console.log("Status check complete."));
+        }
+
+        // Lock down function
+        function showSoldOut(message) {
+            form.style.display = "none";
+            const notice = document.getElementById("sold-out-notice");
+            notice.innerHTML = message + "<br><span style='font-size:1rem; font-weight:normal; color:#555;'>Please check back next week.</span>";
+            notice.style.display = "block";
+            
+            const stockTag = document.getElementById("stock-tag");
+            stockTag.innerText = "🔴 CLOSED FOR THIS WEEK";
+            stockTag.style.backgroundColor = "#ffebee";
+            stockTag.style.color = "var(--danger)";
+        }
+    </script>
+
+</body>
+</html>
