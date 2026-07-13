@@ -112,7 +112,12 @@
             box-shadow: 0 0 0 3px rgba(255, 183, 77, 0.25);
         }
 
-        /* Delivery highlight style */
+        /* Styling for the conditional address container */
+        #address-container {
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+
         .delivery-active {
             background-color: #fffde7 !important;
             border-color: var(--accent) !important;
@@ -150,6 +155,11 @@
             font-weight: bold;
             font-size: 1.2rem;
             margin-bottom: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -189,8 +199,15 @@
                 <option value="2-dozen-delivery">2 Dozen Cookies - Friday Delivery ($15.98 + $4.99 delivery fee)</option>
             </select>
 
-            <label id="notes-label" for="address_or_notes">Address / Special Notes</label>
-            <textarea id="address_or_notes" name="address_or_notes" rows="4" placeholder="If delivery is selected, please enter your full street address, unit/apartment number, and specific delivery or buzzer instructions here."></textarea>
+            <div id="address-container">
+                <label for="delivery_address">Delivery Address <span style="color: var(--danger);">*</span></label>
+                <textarea id="delivery_address" name="delivery_address" rows="3" placeholder="REQUIRED: Please enter your complete street address, unit/apartment number, buzzer codes, and drop-off instructions here."></textarea>
+            </div>
+
+            <div id="notes-container">
+                <label for="special_notes">Special Notes / Requests</label>
+                <textarea id="special_notes" name="special_notes" rows="3" placeholder="Any allergy notes, preferred pickup time, or general requests..."></textarea>
+            </div>
 
             <button type="submit">Submit Pre-Order</button>
         </form>
@@ -199,21 +216,20 @@
     <script>
         const form = document.getElementById("cookie-form");
         const orderSelection = document.getElementById("order_selection");
-        const notesInput = document.getElementById("address_or_notes");
-        const notesLabel = document.getElementById("notes-label");
+        const addressContainer = document.getElementById("address-container");
+        const addressInput = document.getElementById("delivery_address");
 
-        // Dynamically make the address mandatory with visual warning changes if delivery is chosen
+        // Dynamically toggle the Address field visibility & required status
         orderSelection.addEventListener("change", function() {
             if (this.value.includes("delivery")) {
-                notesInput.required = true;
-                notesInput.classList.add("delivery-active");
-                notesLabel.innerHTML = 'Address / Delivery Instructions <span style="color: var(--danger);">*</span>';
-                notesInput.placeholder = "REQUIRED: Please enter your complete address, apartment/unit number, buzzer codes, and specific drop-off instructions.";
+                addressContainer.style.display = "block";
+                addressInput.required = true;
+                addressInput.classList.add("delivery-active");
             } else {
-                notesInput.required = false;
-                notesInput.classList.remove("delivery-active");
-                notesLabel.innerHTML = 'Address / Special Notes';
-                notesInput.placeholder = "If delivery is selected, please enter your full street address, unit/apartment number, and specific delivery or buzzer instructions here.";
+                addressContainer.style.display = "none";
+                addressInput.required = false;
+                addressInput.classList.remove("delivery-active");
+                addressInput.value = ""; // Clear address input if user switches to pickup
             }
         });
 
