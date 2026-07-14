@@ -41,7 +41,7 @@
             box-shadow: 0 15px 35px rgba(158, 42, 43, 0.15);
             border: 2px solid var(--primary-light);
             box-sizing: border-box;
-            position: relative; /* Allows absolute positioning for the badge */
+            position: relative;
         }
 
         /* Thornhill Exclusive Side Badge */
@@ -219,6 +219,12 @@
 
     <script>
         const form = document.getElementById("order-form");
+
+        // --- SUBMISSION PAYMENT WARNING ALERT ---
+        form.addEventListener("submit", function(event) {
+            // Display popup alert message
+            alert("⚠️ Please note: Payment is due to yonasilver90@gmail.com in order to save your slot. Please send the payment immediately!");
+        });
 
         // --- AUTOMATIC DEADLINE CHECK ---
         const now = new Date();
