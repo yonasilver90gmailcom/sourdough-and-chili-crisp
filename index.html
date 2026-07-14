@@ -36,46 +36,42 @@
             max-width: 500px;
             width: 100%;
             background: rgba(255, 255, 255, 0.98);
-            padding: 30px;
+            padding: 40px 30px 30px 30px;
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(158, 42, 43, 0.15);
             border: 2px solid var(--primary-light);
             box-sizing: border-box;
+            position: relative; /* Allows absolute positioning for the badge */
+        }
+
+        /* Thornhill Exclusive Side Badge */
+        .location-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--primary);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(158, 42, 43, 0.2);
         }
 
         h1 {
             text-align: center;
             color: var(--primary);
-            margin-top: 0;
-            margin-bottom: 5px;
+            margin-top: 10px;
+            margin-bottom: 25px;
             font-size: 2.2rem;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
         }
 
-        .subtitle {
-            text-align: center;
-            color: #bd5a3c;
-            margin-top: 0;
-            margin-bottom: 25px;
-            font-style: italic;
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-
-        /* Added rustic product banner styling */
-        .product-banner {
-            width: 100%;
-            max-height: 220px;
-            object-fit: cover;
-            border-radius: 12px;
-            border: 2.5px solid var(--primary-light);
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(63, 29, 20, 0.1);
-        }
-
         .status-container {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .status-tag {
@@ -95,7 +91,7 @@
             padding: 15px;
             border-radius: 6px;
             font-size: 0.95rem;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             line-height: 1.4;
             color: var(--primary);
             font-weight: bold;
@@ -175,20 +171,12 @@
 <body>
 
     <div class="container">
-        <h1>🌶️ Sourdough & Chili Crisp</h1>
-        <p class="subtitle">Freshly baked sourdough & small-batch chili crisp</p>
+        <div class="location-badge">📍 Thornhill Exclusive Delivery</div>
 
-        <img src="http://googleusercontent.com/image_collection/image_retrieval/7646224398734607318_0" alt="Artisanal sourdough bread with chili crisp" class="product-banner">
+        <h1>🌶️ Sourdough & Chili Crisp</h1>
         
         <div class="status-container">
             <div id="stock-tag" class="status-tag">🟢 ACCEPTING PRE-ORDERS</div>
-        </div>
-
-        <div class="notice-box">
-            ⚠️ Please pay your due amount right away if you want to save your spot! <br>
-            <span style="font-weight: normal; font-size: 0.85rem; color: var(--text); display:block; margin-top: 5px;">
-            Send Interac E-Transfer to: <strong>yonasilver90@gmail.com</strong>
-            </span>
         </div>
 
         <div id="sold-out-notice"></div>
@@ -216,6 +204,13 @@
             <div id="notes-container">
                 <label for="special_notes">Special Notes / Requests</label>
                 <textarea id="special_notes" name="special_notes" rows="3" placeholder="Any dietary restrictions, preferences, or general delivery instructions..."></textarea>
+            </div>
+
+            <div class="notice-box">
+                ⚠️ Please pay your due amount right away if you want to save your spot! <br>
+                <span style="font-weight: normal; font-size: 0.85rem; color: var(--text); display:block; margin-top: 5px;">
+                Send Interac E-Transfer to: <strong>yonasilver90@gmail.com</strong>
+                </span>
             </div>
 
             <button type="submit">Submit Pre-Order</button>
