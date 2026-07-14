@@ -3,21 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Cookie Corner</title>
+    <title>Sourdough & Chili Crisp</title>
     <style>
         :root {
-            --primary: #6d4c41;
-            --primary-light: #d7ccc8;
-            --accent: #ffb74d;
-            --text: #3e2723;
-            --bg: #fffbf7;
-            --danger: #e53935;
-            --success: #2e7d32;
+            --primary: #9e2a2b; /* Deep chili red */
+            --primary-light: #e09f68; /* Warm sourdough crust gold */
+            --accent: #f35b04; /* Bright chili oil orange */
+            --text: #3f1d14; /* Deep rustic brown */
+            --bg: #fffcf2; /* Soft artisanal cream */
+            --danger: #d90429;
+            --success: #38b000;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg);
+            background-image: radial-gradient(var(--primary-light) 0.5px, transparent 0.5px), radial-gradient(var(--primary-light) 0.5px, var(--bg) 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
             color: var(--text);
             margin: 0;
             padding: 20px;
@@ -32,10 +35,11 @@
         .container {
             max-width: 500px;
             width: 100%;
-            background: white;
+            background: rgba(255, 255, 255, 0.98);
             padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(109, 76, 65, 0.08);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(158, 42, 43, 0.15);
+            border: 2px solid var(--primary-light);
             box-sizing: border-box;
         }
 
@@ -44,16 +48,18 @@
             color: var(--primary);
             margin-top: 0;
             margin-bottom: 5px;
-            font-size: 2rem;
+            font-size: 2.2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
         }
 
         .subtitle {
             text-align: center;
-            color: #795548;
+            color: #bd5a3c;
             margin-top: 0;
             margin-bottom: 25px;
             font-style: italic;
-            font-size: 1.05rem;
+            font-size: 1.1rem;
+            font-weight: 500;
         }
 
         .status-container {
@@ -73,34 +79,36 @@
         }
 
         .notice-box {
-            background-color: #ffebee;
-            border-left: 4px solid var(--danger);
+            background-color: #fff0f0;
+            border-left: 4px solid var(--primary);
             padding: 15px;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 0.95rem;
             margin-bottom: 25px;
             line-height: 1.4;
-            color: #c62828;
+            color: var(--primary);
             font-weight: bold;
         }
 
         label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 0.95rem;
             color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         input, select, textarea {
             width: 100%;
             padding: 12px 15px;
             margin-bottom: 20px;
-            border: 1.5px solid var(--primary-light);
-            border-radius: 8px;
+            border: 2px solid #ecd9c6;
+            border-radius: 10px;
             font-size: 1rem;
             box-sizing: border-box;
-            background-color: #fafafa;
+            background-color: #fffdfa;
             transition: all 0.2s ease;
             color: var(--text);
         }
@@ -109,18 +117,12 @@
             outline: none;
             border-color: var(--accent);
             background-color: white;
-            box-shadow: 0 0 0 3px rgba(255, 183, 77, 0.25);
+            box-shadow: 0 0 0 3px rgba(243, 91, 4, 0.2);
         }
 
-        /* Styling for the conditional address container */
-        #address-container {
-            display: none;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .delivery-active {
+        .mandatory-field {
             background-color: #fffde7 !important;
-            border-color: var(--accent) !important;
+            border-color: var(--primary-light) !important;
         }
 
         button {
@@ -128,16 +130,17 @@
             background-color: var(--primary);
             color: white;
             border: none;
-            padding: 14px;
-            font-size: 1.1rem;
+            padding: 15px;
+            font-size: 1.15rem;
             font-weight: bold;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
+            box-shadow: 0 4px 10px rgba(158, 42, 43, 0.3);
             transition: background-color 0.2s ease, transform 0.1s ease;
         }
 
         button:hover {
-            background-color: #4e342e;
+            background-color: #7a2021;
         }
 
         button:active {
@@ -147,27 +150,22 @@
         #sold-out-notice {
             display: none;
             text-align: center;
-            background-color: #ffebee;
+            background-color: #fff0f0;
             color: var(--danger);
-            border: 1px solid var(--danger);
+            border: 2px solid var(--primary);
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: bold;
             font-size: 1.2rem;
             margin-bottom: 20px;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-5px); }
-            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>🍪 The Cookie Corner</h1>
-        <p class="subtitle">Freshly baked cookies for Shabbos</p>
+        <h1>🌶️ Sourdough & Chili Crisp</h1>
+        <p class="subtitle">Freshly baked sourdough & small-batch chili crisp</p>
         
         <div class="status-container">
             <div id="stock-tag" class="status-tag">🟢 ACCEPTING PRE-ORDERS</div>
@@ -175,14 +173,14 @@
 
         <div class="notice-box">
             ⚠️ Please pay your due amount right away if you want to save your spot! <br>
-            <span style="font-weight: normal; font-size: 0.85rem; color: #3e2723; display:block; margin-top: 5px;">
+            <span style="font-weight: normal; font-size: 0.85rem; color: var(--text); display:block; margin-top: 5px;">
             Send Interac E-Transfer to: <strong>yonasilver90@gmail.com</strong>
             </span>
         </div>
 
         <div id="sold-out-notice"></div>
 
-        <form id="cookie-form" action="https://formspree.io/f/xeeyqvod" method="POST">
+        <form id="order-form" action="https://formspree.io/f/xeeyqvod" method="POST">
             
             <label for="name">Your Full Name</label>
             <input type="text" id="name" name="name" placeholder="John Doe" required>
@@ -193,20 +191,18 @@
             <label for="order_selection">Select Your Order</label>
             <select id="order_selection" name="order_selection" required>
                 <option value="" disabled selected>Choose an option...</option>
-                <option value="1-dozen-pickup">1 Dozen Cookies - Friday Pickup ($7.99)</option>
-                <option value="2-dozen-pickup">2 Dozen Cookies - Friday Pickup ($15.98)</option>
-                <option value="1-dozen-delivery">1 Dozen Cookies - Friday Delivery ($7.99 + $4.99 delivery fee)</option>
-                <option value="2-dozen-delivery">2 Dozen Cookies - Friday Delivery ($15.98 + $4.99 delivery fee)</option>
+                <option value="1-pack-delivery">1 Sourdough Loaf & 1 Chili Crisp Jar - Delivery ($19.99 + $4.99 delivery fee)</option>
+                <option value="2-pack-delivery">2 Sourdough Loaves & 2 Chili Crisp Jars - Delivery ($39.98 + $4.99 delivery fee)</option>
             </select>
 
             <div id="address-container">
                 <label for="delivery_address">Delivery Address <span style="color: var(--danger);">*</span></label>
-                <textarea id="delivery_address" name="delivery_address" rows="3" placeholder="REQUIRED: Please enter your complete street address, unit/apartment number, buzzer codes, and drop-off instructions here."></textarea>
+                <textarea id="delivery_address" name="delivery_address" class="mandatory-field" rows="3" placeholder="REQUIRED: Please enter your complete street address, unit/apartment/building number, buzzer codes, and drop-off instructions here." required></textarea>
             </div>
 
             <div id="notes-container">
                 <label for="special_notes">Special Notes / Requests</label>
-                <textarea id="special_notes" name="special_notes" rows="3" placeholder="Any allergy notes, preferred pickup time, or general requests..."></textarea>
+                <textarea id="special_notes" name="special_notes" rows="3" placeholder="Any dietary restrictions, preferences, or general delivery instructions..."></textarea>
             </div>
 
             <button type="submit">Submit Pre-Order</button>
@@ -214,24 +210,7 @@
     </div>
 
     <script>
-        const form = document.getElementById("cookie-form");
-        const orderSelection = document.getElementById("order_selection");
-        const addressContainer = document.getElementById("address-container");
-        const addressInput = document.getElementById("delivery_address");
-
-        // Dynamically toggle the Address field visibility & required status
-        orderSelection.addEventListener("change", function() {
-            if (this.value.includes("delivery")) {
-                addressContainer.style.display = "block";
-                addressInput.required = true;
-                addressInput.classList.add("delivery-active");
-            } else {
-                addressContainer.style.display = "none";
-                addressInput.required = false;
-                addressInput.classList.remove("delivery-active");
-                addressInput.value = ""; // Clear address input if user switches to pickup
-            }
-        });
+        const form = document.getElementById("order-form");
 
         // --- AUTOMATIC DEADLINE CHECK ---
         const now = new Date();
@@ -250,7 +229,7 @@
             
             const stockTag = document.getElementById("stock-tag");
             stockTag.innerText = "🔴 CLOSED FOR THIS WEEK";
-            stockTag.style.backgroundColor = "#ffebee";
+            stockTag.style.backgroundColor = "#fff0f0";
             stockTag.style.color = "var(--danger)";
         }
     </script>
